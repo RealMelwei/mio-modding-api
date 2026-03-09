@@ -3,7 +3,6 @@
 #include <psapi.h>
 #include <stdio.h>
 #include <windows.h>
-#include <future>
 
 #pragma comment(lib, "psapi.lib")
 #pragma comment(lib, "dwmapi.lib")

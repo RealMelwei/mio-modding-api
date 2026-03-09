@@ -2,8 +2,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <windows.h>
-#include <functional>
-#include "polyhook2/IHook.hpp"
 #include "polyhook2/Detour/NatDetour.hpp"
 
 using u32 = std::uint32_t;

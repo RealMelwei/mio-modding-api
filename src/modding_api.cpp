@@ -1,9 +1,7 @@
 #include "modding_api.h"
-#include "polyhook2/IHook.hpp"
 #include "polyhook2/Detour/NatDetour.hpp"
 #include <psapi.h>
 #include <stdio.h>
-#include <functional>
 #include <string>
 
 #pragma comment(lib, "psapi.lib")
