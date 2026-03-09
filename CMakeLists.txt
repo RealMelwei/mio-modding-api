@@ -62,3 +62,8 @@ add_custom_command(TARGET winhttp POST_BUILD
     "${CMAKE_BINARY_DIR}/bin/mods"
     COMMENT "Creating mods directory"
 )
+
+# Include, configure and link the PolyHook2 library
+find_package(PolyHook_2 CONFIG REQUIRED)
+set_property(TARGET winhttp PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+target_link_libraries(winhttp PRIVATE PolyHook_2::PolyHook_2)

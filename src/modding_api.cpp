@@ -1,6 +1,10 @@
 #include "modding_api.h"
+#include "polyhook2/IHook.hpp"
+#include "polyhook2/Detour/NatDetour.hpp"
 #include <psapi.h>
 #include <stdio.h>
+#include <functional>
+#include <string>
 
 #pragma comment(lib, "psapi.lib")
 
@@ -9,6 +13,9 @@ namespace ModAPI {
 void *g_PlayerStaminaAddr = nullptr;
 void *g_PlayerVelocityXAddr = nullptr;
 void *g_PlayerVelocityYAddr = nullptr;
+
+// Method addresses
+void *g_OnEnemyHitAddr = nullptr;
 
 // Base address for pointer chain
 void **g_PlayerLocationBasePtr = nullptr;
@@ -36,6 +43,38 @@ void *FollowPointer(void *basePtr, int offset) {
     return nullptr;
 
   return (void *)((uintptr_t)ptr + offset);
+}
+
+// ========================================
+// Event Hooks
+// ========================================
+
+std::vector<std::function<void(uintptr_t, uintptr_t)>> enemyhit_hooks;
+uintptr_t enemyhit_trampoline = NULL;
+
+NOINLINE void __cdecl resolve_enemyhit_hook(uintptr_t enemy_info_address, uintptr_t hit_info_address) {
+    for (int i = 0; i < enemyhit_hooks.size(); i++) {
+        enemyhit_hooks[i](enemy_info_address, hit_info_address);
+    }
+    typedef int func(uintptr_t, uintptr_t);
+    func* trampoline = (func*)(enemyhit_trampoline);
+    int i = trampoline(enemy_info_address, hit_info_address);
+    LogMessage("Trampoline executed; Trampoline address:");
+    LogMessage(std::to_string(enemyhit_trampoline).c_str());
+}
+
+MODDING_API void RunOnEnemyHit(std::function<void(uintptr_t, uintptr_t)> callback) {
+    enemyhit_hooks.push_back(callback);
+}
+
+
+MODDING_API void InitializeHooks() {
+    PLH::NatDetour enemyhit_hook_detour = PLH::NatDetour((uintptr_t)ModAPI::g_OnEnemyHitAddr, (uintptr_t)resolve_enemyhit_hook, &enemyhit_trampoline);
+    enemyhit_hook_detour.hook();
+
+    while (true) {
+        Sleep(100000);
+    }
 }
 
 // ========================================
@@ -105,6 +144,7 @@ MODDING_API void *PatternScan(const char *pattern, const char *mask) {
   }
   return nullptr;
 }
+
 
 // ========================================
 // Player Functions
@@ -388,6 +428,8 @@ MODDING_API void InitializeAddresses() {
   uintptr_t saveArrayPtrAddr = baseAddr + 0x01114AD0;
   uintptr_t saveArraySizeAddr = baseAddr + 0x01114AC8;
 
+  uintptr_t onEnemyHitAddr = baseAddr + 0x075cfd0;
+
   // Store the address
   ModAPI::g_PlayerLocationBasePtr = (void **)playerLocationBasePtrAddr;
   ModAPI::g_PlayerHealthBasePtr = (void **)playerHealthBasePtrAddr;
@@ -399,6 +441,8 @@ MODDING_API void InitializeAddresses() {
   ModAPI::g_SaveArraySize = (uint32_t *)saveArraySizeAddr;
   ModAPI::g_PlayerVelocityXAddr = (void *)(baseAddr + 0x10EE0C8);
   ModAPI::g_PlayerVelocityYAddr = (void *)(baseAddr + 0x10EE0CC);
+
+  ModAPI::g_OnEnemyHitAddr = (void*)onEnemyHitAddr;
 }
 
 // ========================================

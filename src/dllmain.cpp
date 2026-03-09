@@ -3,6 +3,7 @@
 #include <psapi.h>
 #include <stdio.h>
 #include <windows.h>
+#include <future>
 
 #pragma comment(lib, "psapi.lib")
 #pragma comment(lib, "dwmapi.lib")
@@ -394,6 +395,9 @@ void InitializeModAPI() {
   // Initialize addresses from Cheat Engine findings
   InitializeAddresses();
 
+  // Create function hooks
+  std::thread hook_init_thread(InitializeHooks);
+
   printf("Disabling DWM...");
   DisableDWM(); // Needed for GUI mods on some systems
 
@@ -405,6 +409,10 @@ void InitializeModAPI() {
   printf("\n==============================================\n");
   printf("Modding API ready!\n");
   printf("==============================================\n\n");
+
+  while (true) {
+      Sleep(1000);
+  }
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call,

@@ -1,5 +1,8 @@
 {
-    "dependencies": [],
-    "name": "modding-api",
-    "version": "0.0.5"
+  "dependencies": [
+    "polyhook2"
+  ],
+  "name": "modding-api",
+  "version": "0.0.5",
+  "builtin-baseline": "1e199d32ad53aab1defda61ce41c380302e3f95c"
 }

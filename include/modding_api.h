@@ -2,6 +2,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <windows.h>
+#include <functional>
+#include "polyhook2/IHook.hpp"
+#include "polyhook2/Detour/NatDetour.hpp"
 
 using u32 = std::uint32_t;
 using u64 = std::uint64_t;
@@ -68,6 +71,10 @@ typedef struct SaveEntry { // 88 bytes
 extern "C" {
 // Initialization
 MODDING_API void InitializeAddresses();
+
+// Function Hooks
+MODDING_API void RunOnEnemyHit(std::function<void(uintptr_t, uintptr_t)> callback);
+MODDING_API void InitializeHooks();
 
 // Player functions
 MODDING_API f32x3 GetPlayerLocation();
