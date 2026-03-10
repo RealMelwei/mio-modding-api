@@ -1,6 +1,31 @@
 #pragma once
 #include "pch.h"
 
+#ifdef MODDING_API_EXPORTS
+#define MODDING_API __declspec(dllexport)
+#else
+#define MODDING_API __declspec(dllimport)
+#endif
+
+// VECTORS
+
+typedef struct Vector3 {
+	float x, y, z;
+	Vector3(float x, float y, float z) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+};
+typedef struct Vector2 {
+	float x, y;
+	Vector2(float x, float y) {
+		this->x = x;
+		this->y = y;
+	}
+};
+
+// MEMORY UTIL
 
 bool WriteMemory(void* address, const void* data, size_t size);
 bool ReadMemory(void* address, void* buffer, size_t size);

@@ -187,10 +187,9 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="memory-util.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="mio-modding-api.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="vectors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

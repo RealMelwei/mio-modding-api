@@ -21,10 +21,7 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vectors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="memory-util.h">
+    <ClInclude Include="mio-modding-api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

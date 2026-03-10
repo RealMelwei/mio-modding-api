@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <psapi.h>
+#include "mio-modding-api.h"
 
 bool WriteMemory(void* address, const void* data, size_t size) {
     DWORD oldProtect;
