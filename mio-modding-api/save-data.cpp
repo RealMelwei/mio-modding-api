@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "Windows.h"
 #include "mio-modding-api.h"
 
 using SaveEntry = ModAPI::SaveData::SaveEntry;
