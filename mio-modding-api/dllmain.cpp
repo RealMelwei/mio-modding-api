@@ -2,6 +2,7 @@
 #include "Windows.h"
 #include <stdio.h>
 #include "mio-modding-api.h"
+#include <string>
 
 namespace ModAPI {
 	// Constant addresses
@@ -33,11 +34,21 @@ namespace ModAPI {
 		const int PLAYER_HEALTH_OFFSET = 0xD4;
 		const int PLAYER_LIQUID_NACRE_OFFSET = 0x754;
 	}
+	namespace Util {
+		MODDING_API void LogMessage(char* modId, const char* message) {
+			printf("[%s] %s\n", modId, message);
+			fflush(stdout);
+		}
+	}
+}
+char* modId;
+void LogMessage(const char* message) {
+	ModAPI::Util::LogMessage(modId, message);
 }
 void LoadMemoryAddresses() {
 	HMODULE hModule = GetModuleHandleA("mio.exe");
 	if (!hModule) {
-		//LogMessage("ERROR: Failed to get mio.exe module handle!");
+		LogMessage("ERROR: Failed to get mio.exe module handle!");
 		return;
 	}
 
@@ -70,7 +81,12 @@ void LoadMemoryAddresses() {
 	ModAPI::Addresses::g_PlayerVelocityXAddr = (void*)(plrObjAddr + 0x478);
 	ModAPI::Addresses::g_PlayerVelocityYAddr = (void*)(plrObjAddr + 0x47C);
 }
-extern "C" __declspec(dllexport) void ModInit() {
+extern "C" __declspec(dllexport) void ModInit(char* id) {
+	//Making the printfs actually be sent to console
+	FILE* f;
+	freopen_s(&f, "CONOUT$", "w", stdout);
+
+	modId = id;
 	LoadMemoryAddresses();
 }
 

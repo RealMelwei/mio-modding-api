@@ -137,6 +137,7 @@ namespace ModAPI {
 			MODDING_API void* PatternScan(HMODULE module, const char* pattern, const char* mask);
 			MODDING_API void* PatternScanReverse(HMODULE module, void* from, const char* pattern, const char* mask);
 			MODDING_API void* FollowPointer(void* basePtr, int offset);
+			MODDING_API void LogMessage(char* modId, const char* message);
 		}
 		template <typename ReturnType, typename... Args>
 		ReturnType CallAssembly(void* address, Args... args) {
