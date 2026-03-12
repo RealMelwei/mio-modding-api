@@ -2,14 +2,7 @@
 build/
 install/
 out/
-
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-*.cmake
-!CMakeLists.txt
-!CMakePresets.json
+x64/
 
 # Visual Studio
 .vs/
