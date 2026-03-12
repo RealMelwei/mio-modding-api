@@ -44,29 +44,31 @@ void LoadMemoryAddresses() {
 	// Get the base address of mio.exe
 	uintptr_t baseAddr = (uintptr_t)hModule;
 
-	// Add the offset from Cheat Engine
-	uintptr_t playerLocationBasePtrAddr = baseAddr + 0x010EDF48;
-	uintptr_t playerHealthBasePtrAddr = baseAddr + 0x010EE2E8;
-	uintptr_t playerNacreBasePtrAddr = baseAddr + 0x01114AD0;
-	uintptr_t playerStaminaPtrAddr = baseAddr + 0x110F9A8;
+	uintptr_t plrObjAddr = (baseAddr + 0x10efc50);
 
-	uintptr_t saveArrayPtrAddr = baseAddr + 0x01114AD0;
-	uintptr_t saveArraySizeAddr = baseAddr + 0x01114AC8;
+	// Add the offset from Cheat Engine
+	uintptr_t playerLocationBasePtrAddr = plrObjAddr + 0x2F8;
+	uintptr_t playerHealthBasePtrAddr = plrObjAddr + 0x698;
+	uintptr_t playerNacreBasePtrAddr = baseAddr + 0x01114AD0;
+	uintptr_t playerStaminaPtrAddr = baseAddr + 0x11119a8;
+
+	uintptr_t saveArrayPtrAddr = baseAddr + 0x1116bf8;
+	uintptr_t saveArraySizeAddr = baseAddr + 0x1116bf0;
 
 	// Store the address
 	ModAPI::Pointers::g_PlayerLocationBasePtr = (void**)playerLocationBasePtrAddr;
 	ModAPI::Pointers::g_PlayerHealthBasePtr = (void**)playerHealthBasePtrAddr;
 	ModAPI::Pointers::g_PlayerNacreBasePtr = (void**)playerNacreBasePtrAddr;
 
-	ModAPI::Addresses::g_MoveByMethodAddr = (void*)(ModAPI::Util::PatternScanReverse(hModule, ModAPI::Util::PatternScan(hModule, "\x48\x8d\x05\x84\x42\x58\x00", "xxxxxxx"), "\x41\x57", "xx"));
-	ModAPI::Addresses::g_PlayerObjAddr = (void*)(baseAddr + 0x10edc50);
+	ModAPI::Addresses::g_MoveByMethodAddr = (void*)(baseAddr+0x9d6270);
 
 	ModAPI::Addresses::g_PlayerStaminaAddr = (void*)playerStaminaPtrAddr;
+	ModAPI::Addresses::g_PlayerObjAddr = (void*)(baseAddr + 0x10efc50);
 
 	ModAPI::Pointers::g_SaveArrayPtr = (void***)saveArrayPtrAddr;
 	ModAPI::SaveData::g_SaveArraySize = (uint32_t*)saveArraySizeAddr;
-	ModAPI::Addresses::g_PlayerVelocityXAddr = (void*)(baseAddr + 0x10EE0C8);
-	ModAPI::Addresses::g_PlayerVelocityYAddr = (void*)(baseAddr + 0x10EE0CC);
+	ModAPI::Addresses::g_PlayerVelocityXAddr = (void*)(plrObjAddr + 0x478);
+	ModAPI::Addresses::g_PlayerVelocityYAddr = (void*)(plrObjAddr + 0x47C);
 }
 extern "C" __declspec(dllexport) void ModInit() {
 	LoadMemoryAddresses();
