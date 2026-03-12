@@ -419,7 +419,7 @@ MODDING_API void InitializeAddresses() {
   uintptr_t saveArrayPtrAddr = baseAddr + 0x01114AD0;
   uintptr_t saveArraySizeAddr = baseAddr + 0x01114AC8;
 
-  uintptr_t onEnemyHitAddr = baseAddr + 0x075cfd0;
+  uintptr_t onEnemyHitAddr = baseAddr + 0x075f076;
 
   // Store the address
   ModAPI::g_PlayerLocationBasePtr = (void **)playerLocationBasePtrAddr;
