@@ -12,6 +12,7 @@ namespace ModAPI {
 		void* g_PlayerVelocityYAddr = nullptr;
 		void* g_MoveByMethodAddr = nullptr;
 		void* g_PlayerObjAddr = nullptr;
+		void* g_HitEnemyAddress = nullptr;
 	}
 
 	// Base address for pointer chain
@@ -48,7 +49,7 @@ void LogMessage(const char* message) {
 void LoadMemoryAddresses() {
 	HMODULE hModule = GetModuleHandleA("mio.exe");
 	if (!hModule) {
-		LogMessage("ERROR: Failed to get mio.exe module handle!");
+		ModAPI::Util::LogMessage(modId, "ERROR: Failed to get mio.exe module handle!");
 		return;
 	}
 
@@ -66,6 +67,8 @@ void LoadMemoryAddresses() {
 	uintptr_t saveArrayPtrAddr = baseAddr + 0x1116bf8;
 	uintptr_t saveArraySizeAddr = baseAddr + 0x1116bf0;
 
+	uintptr_t hitEnemyFunctionAddress = baseAddr + 0x75ed70;
+
 	// Store the address
 	ModAPI::Pointers::g_PlayerLocationBasePtr = (void**)playerLocationBasePtrAddr;
 	ModAPI::Pointers::g_PlayerHealthBasePtr = (void**)playerHealthBasePtrAddr;
@@ -80,7 +83,10 @@ void LoadMemoryAddresses() {
 	ModAPI::SaveData::g_SaveArraySize = (uint32_t*)saveArraySizeAddr;
 	ModAPI::Addresses::g_PlayerVelocityXAddr = (void*)(plrObjAddr + 0x478);
 	ModAPI::Addresses::g_PlayerVelocityYAddr = (void*)(plrObjAddr + 0x47C);
+
+	ModAPI::Addresses::g_HitEnemyAddress = (void*)hitEnemyFunctionAddress;
 }
+
 extern "C" __declspec(dllexport) void ModInit(char* id) {
 	//Making the printfs actually be sent to console
 	FILE* f;
@@ -88,6 +94,8 @@ extern "C" __declspec(dllexport) void ModInit(char* id) {
 
 	modId = id;
 	LoadMemoryAddresses();
+
+	ModAPI::Hooks::InitializeHooks();
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,

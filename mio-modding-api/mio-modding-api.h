@@ -2,6 +2,7 @@
 #include "Windows.h"
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 
 #ifdef MODDING_API_EXPORTS
 #define MODDING_API __declspec(dllexport)
@@ -68,6 +69,7 @@ namespace ModAPI {
 		extern void* g_PlayerVelocityYAddr;
 		extern void* g_MoveByMethodAddr;
 		extern void* g_PlayerObjAddr;
+		extern void* g_HitEnemyAddress;
 	}
 	// Offsets from Cheat Engine pointer scan
 	namespace Offsets {
@@ -155,5 +157,11 @@ namespace ModAPI {
 		bool WriteMemoryTyped(void* address, T value) {
 			return WriteMemory(address, &value, sizeof(T));
 		}
+	}
+	namespace Hooks {
+		namespace Combat {
+			MODDING_API void RunOnHitEnemy(std::function<void(uintptr_t, uintptr_t)> callback);
+		}
+		MODDING_API void InitializeHooks();
 	}
 }
