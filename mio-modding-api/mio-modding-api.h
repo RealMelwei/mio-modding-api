@@ -70,6 +70,7 @@ namespace ModAPI {
 		extern void* g_MoveByMethodAddr;
 		extern void* g_PlayerObjAddr;
 		extern void* g_HitEnemyAddress;
+		extern void* g_MenuStateAddr;
 	}
 	// Offsets from Cheat Engine pointer scan
 	namespace Offsets {
@@ -78,6 +79,17 @@ namespace ModAPI {
 		extern const int PLAYER_Z_OFFSET; // Usually Z is 4 bytes after Y
 		extern const int PLAYER_HEALTH_OFFSET;
 		extern const int PLAYER_LIQUID_NACRE_OFFSET;
+	}
+	namespace Enums {
+		enum MenuState {
+			Start,		     // 0
+			Splashes,        // 1
+			Shader_spinner,  // 2
+			Main_menu,       // 3
+			Game,            // 4
+			Credits,         // 5
+			Exit             // 6
+		};
 	}
 	namespace Player {
 		extern "C" {
@@ -140,6 +152,10 @@ namespace ModAPI {
 			MODDING_API void* PatternScanReverse(HMODULE module, void* from, const char* pattern, const char* mask);
 			MODDING_API void* FollowPointer(void* basePtr, int offset);
 			MODDING_API void LogMessage(char* modId, const char* message);
+			MODDING_API Enums::MenuState GetGameMenuState();
+			MODDING_API bool SetGameMenuState(Enums::MenuState state);
+			MODDING_API bool CheckIfSaveLoaded();
+			MODDING_API void WaitForSaveLoaded();
 		}
 		template <typename ReturnType, typename... Args>
 		ReturnType CallAssembly(void* address, Args... args) {
