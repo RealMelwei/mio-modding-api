@@ -10,6 +10,7 @@ namespace ModAPI {
 		void* g_PlayerStaminaAddr = nullptr;
 		void* g_PlayerVelocityXAddr = nullptr;
 		void* g_PlayerVelocityYAddr = nullptr;
+		void* g_MenuStateAddr = nullptr;
 		void* g_MoveByMethodAddr = nullptr;
 		void* g_PlayerObjAddr = nullptr;
 		void* g_HitEnemyAddress = nullptr;
@@ -64,6 +65,8 @@ void LoadMemoryAddresses() {
 	uintptr_t playerNacreBasePtrAddr = baseAddr + 0x01114AD0;
 	uintptr_t playerStaminaPtrAddr = baseAddr + 0x11119a8;
 
+	uintptr_t menuStateAddr = baseAddr + 0x10E1C88;
+
 	uintptr_t saveArrayPtrAddr = baseAddr + 0x1116bf8;
 	uintptr_t saveArraySizeAddr = baseAddr + 0x1116bf0;
 
@@ -74,7 +77,9 @@ void LoadMemoryAddresses() {
 	ModAPI::Pointers::g_PlayerHealthBasePtr = (void**)playerHealthBasePtrAddr;
 	ModAPI::Pointers::g_PlayerNacreBasePtr = (void**)playerNacreBasePtrAddr;
 
-	ModAPI::Addresses::g_MoveByMethodAddr = (void*)(baseAddr+0x9d6270);
+	ModAPI::Addresses::g_MenuStateAddr = (void*)menuStateAddr;
+
+	ModAPI::Addresses::g_MoveByMethodAddr = (void*)(baseAddr + 0x9d6270);
 
 	ModAPI::Addresses::g_PlayerStaminaAddr = (void*)playerStaminaPtrAddr;
 	ModAPI::Addresses::g_PlayerObjAddr = (void*)(baseAddr + 0x10efc50);
