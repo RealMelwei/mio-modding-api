@@ -49,23 +49,6 @@ char* modId;
 void LogMessage(const char* message) {
 	ModAPI::Util::LogMessage(modId, message);
 }
-DWORD ApplyTesting(LPVOID lpParam) {
-	float time = 1000. / 10.;
-	while(true) {
-		while(true) {
-			Vector3 pos = ModAPI::Player::GetPlayerLocation();
-
-			if(pos.x != -1.0f && pos.y != -1.0f && pos.z != -1.0f) {
-				break;
-			}
-			Sleep(time);
-		}
-		Sleep(time);
-		ModAPI::SaveData::GiveFlag("RESOURCE:PEARL_SHARDS", 1);
-	}
-
-	return 0;
-}
 void LoadMemoryAddresses() {
 	HMODULE hModule = GetModuleHandleA("mio.exe");
 	if (!hModule) {
@@ -124,7 +107,6 @@ extern "C" __declspec(dllexport) void ModInit(char* id) {
 	LoadMemoryAddresses();
 
 	ModAPI::Hooks::InitializeHooks();
-	CreateThread(nullptr, 0, ApplyTesting, nullptr, 0, nullptr);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,
