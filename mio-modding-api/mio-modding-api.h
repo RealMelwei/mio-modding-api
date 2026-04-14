@@ -117,6 +117,8 @@ namespace ModAPI {
 	 * instead of accessing these directly.
 	 */
 	namespace Addresses {
+		extern uintptr_t g_BaseAddr;		///< Base Address for the mio.exe.
+
 		extern void* g_PlayerStaminaAddr;	///< Direct address of the player's stamina value.
 		extern void* g_PlayerVelocityXAddr; ///< Direct address of the player's X velocity value, offset from the player object.
 		extern void* g_PlayerVelocityYAddr; ///< Direct address of the player's Y velocity value, offset from the player object.
@@ -124,6 +126,7 @@ namespace ModAPI {
 		extern void* g_PlayerObjAddr;		///< Direct address of the player object.
 		extern void* g_HitEnemyAddress;		///< Address of the game's internal hit enemy function.
 		extern void* g_MenuStateAddr;		///< Direct address of the current menu state value.
+		extern void* g_GiveFlagAddress;		///< Address of the game's internal give flag function.
 	} // namespace Addresses
 
 	/**
@@ -268,6 +271,10 @@ namespace ModAPI {
 			char* data;		 ///< Pointer to the string data.
 			uint32_t size;	 ///< Length of the string in bytes.
 			uint32_t unused; ///< Padding - do not use.
+			GameString(char* data) {
+				this->data = data;
+				size = strlen(data);
+			}
 		} GameString;
 		static_assert(sizeof(GameString) == 16, "GameString size mismatch — struct layout may be wrong");
 
@@ -362,6 +369,13 @@ namespace ModAPI {
 			 * @return True on success, false if the entry was not found.
 			 */
 			MODDING_API bool SetSaveEntryValueFlags(const char* name, uint32_t flags);
+			/**
+			 * @brief Increases the amount for a flag
+			 * @param flag The flag to increase.
+			 * @param amount The amount to increase the flag by.
+			 * @return The game's internal return value from the give flag method.
+			 */
+			MODDING_API char* GiveFlag(const char* flag, int32_t amount);
 		}
 	} // namespace SaveData
 
@@ -537,6 +551,23 @@ namespace ModAPI {
 			 */
 			MODDING_API void RunOnHitEnemy(std::function<void(uintptr_t, uintptr_t)> callback);
 		} // namespace Combat
+
+		/**
+		 * @brief Hooks related to flags.
+		 */
+		namespace Flags {
+			/**
+			 * @brief Registers a callback to be invoked whenever the player is given a flag.
+			 *
+			 * Multiple callbacks can be registered and all will fire on each hit.
+			 *
+			 * @param callback Function to call on enemy hit. Receives two arguments:
+			 *                 - An unknown pointer to an object (uintptr_t)
+			 *                 - A pointer to the GameString for the flag type, You may modify this pointer (GameString*)
+			 *                 - A pointer to the amount of the flag, You may modify this pointer (int32_t*)
+			 */
+			MODDING_API void RunOnGiveFlag(std::function<void(uintptr_t, ModAPI::SaveData::GameString*, int32_t*)> callback);
+		} // namespace Flags
 
 		/**
 		 * @brief Hooks related to game time.
