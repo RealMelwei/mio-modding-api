@@ -5,6 +5,11 @@
 namespace ModAPI {
     namespace Util {
         extern "C" {
+			MODDING_API void EnableDebugUI() {
+				CallAssembly<void>(ModAPI::Addresses::g_EnableDebugAddress);
+				CallAssembly<void>(ModAPI::Addresses::g_EnableGUIAddress);
+			}
+
             MODDING_API bool WriteMemory(void* address, const void* data, size_t size) {
                 DWORD oldProtect;
                 if (!VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldProtect)) {

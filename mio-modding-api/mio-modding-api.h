@@ -127,6 +127,8 @@ namespace ModAPI {
 		extern void* g_HitEnemyAddress;		///< Address of the game's internal hit enemy function.
 		extern void* g_MenuStateAddr;		///< Direct address of the current menu state value.
 		extern void* g_GiveFlagAddress;		///< Address of the game's internal give flag function.
+		extern void* g_EnableDebugAddress;	///< Address of the game's enable debug method.
+		extern void* g_EnableGUIAddress;	///< Address of the game's enable GUI method.
 	} // namespace Addresses
 
 	/**
