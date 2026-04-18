@@ -129,7 +129,6 @@ namespace ModAPI {
 		extern void* g_GiveFlagAddress;		///< Address of the game's internal give flag function.
 		extern void* g_EnableDebugAddress;	///< Address of the game's enable debug method.
 		extern void* g_EnableGUIAddress;	///< Address of the game's enable GUI method.
-		extern void* g_DisableDebugAddress;	///< Address of the game's disable debug method.
 		extern void* g_DisableGUIAddress;	///< Address of the game's disable GUI method.
 	} // namespace Addresses
 

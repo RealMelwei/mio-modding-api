@@ -18,6 +18,8 @@ namespace ModAPI {
 		void* g_GiveFlagAddress = nullptr;
 		void* g_EnableDebugAddress = nullptr;
 		void* g_EnableGUIAddress = nullptr;
+		void* g_DisableDebugAddress = nullptr;
+		void* g_DisableGUIAddress = nullptr;
 	}
 
 	// Base address for pointer chain
@@ -79,6 +81,7 @@ void LoadMemoryAddresses() {
 
 	uintptr_t enableDebugAddress = baseAddr + 0x597860;
 	uintptr_t enableGUIAddress = baseAddr + 0x45b5e0;
+	uintptr_t disableGUIAddress = baseAddr + 0x45b5d0;
 
 	// Store the address
 	ModAPI::Addresses::g_BaseAddr = baseAddr;
@@ -104,6 +107,7 @@ void LoadMemoryAddresses() {
 
 	ModAPI::Addresses::g_EnableDebugAddress = (void*)enableDebugAddress;
 	ModAPI::Addresses::g_EnableGUIAddress = (void*)enableGUIAddress;
+	ModAPI::Addresses::g_DisableGUIAddress = (void*)disableGUIAddress;
 }
 
 extern "C" __declspec(dllexport) void ModInit(char* id) {
